@@ -302,13 +302,20 @@ int main(int argc, char* argv[])
 		    //pass in thresholded frame to our object tracking function
 		    //this function will return the x and y coordinates of the
 		    //filtered object
-		    if (trackObjects)
+		    if (trackObjects){
+			    
 			      trackFilteredObject(x_r, y_r, threshold, cameraFeed); 
+			      printf("me_x=%d, me_y=%d\n",x_r, y_r);
+			    
+		    }
           
                      if (useMorphOps)
 			    morphOps(threshold2); 
-                      if (trackObjects)
-                               trackFilteredObject(x_b, y_b, threshold2, cameraFeed);  
+                      if (trackObjects){
+			      
+                               trackFilteredObject(x_b, y_b, threshold2, cameraFeed);
+			       printf("you_x=%d, you_y=%d\n", x_b, y_b);
+		      }
                                  
 
 		    //show frames
