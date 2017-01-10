@@ -309,7 +309,7 @@ int main(int argc, char* argv[])
 			    morphOps(threshold2); 
                       if (trackObjects)
                                trackFilteredObject(x_b, y_b, threshold2, cameraFeed);  
-            */                      
+                                 
 
 		    //show frames
 		    imshow(windowName2, threshold);
