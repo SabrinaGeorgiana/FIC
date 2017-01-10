@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
   //Mat threshold2;
 	//x and y values for the location of the object
 	int x_r = 0,  y_r = 0;
-  int x_b = 0, y_b = 0;
+        int x_b = 0, y_b = 0;
 	//create slider bars for HSV filtering
 	createTrackbars();
 	//video capture object to acquire webcam feed
@@ -293,35 +293,27 @@ int main(int argc, char* argv[])
 		    //filter HSV image between values and store filtered image to
 		    //threshold matrix
 		    inRange(HSV, Scalar(H_MIN_R, S_MIN_R, V_MIN_R), Scalar(H_MAX_R, S_MAX_R, V_MAX_R), threshold);
-        //inRange(HSV, Scalar(H_MIN_B, S_MIN_B, V_MIN_B), Scalar(H_MAX_B, S_MAX_B, V_MAX_B), threshold2);
+                    inRange(HSV, Scalar(H_MIN_B, S_MIN_B, V_MIN_B), Scalar(H_MAX_B, S_MAX_B, V_MAX_B), threshold2);
 		    //perform morphological operations on thresholded image to eliminate noise
 		    //and emphasize the filtered object(s)
 		    if (useMorphOps)
 			    morphOps(threshold);
-        /*                          
-       bzero(buffer, 256);
-       sprintf(buffer, "f");
-       n=write (socketpd, buffer, strlen(buffer));
-       if (n<0){
-         cout<<"Error sending";
-         }
-         */
+       
 		    //pass in thresholded frame to our object tracking function
 		    //this function will return the x and y coordinates of the
 		    //filtered object
 		    if (trackObjects)
-			      trackFilteredObject(x_r, y_r, threshold, cameraFeed);
-          //  trackFilteredObject(x_b, y_b, threshold2, cameraFeed);   
+			      trackFilteredObject(x_r, y_r, threshold, cameraFeed); 
           
-        /* if (useMorphOps)
+                     if (useMorphOps)
 			    morphOps(threshold2); 
-          if (trackObjects)
-            trackFilteredObject(x_b, y_b, threshold2, cameraFeed);  
+                      if (trackObjects)
+                               trackFilteredObject(x_b, y_b, threshold2, cameraFeed);  
             */                      
 
 		    //show frames
 		    imshow(windowName2, threshold);
-      //  imshow(windowName2, threshold2);
+                    imshow(windowName2, threshold2);
 		    imshow(windowName, cameraFeed);
 		    //imshow(windowName1, HSV);
 		    setMouseCallback("Original Image", on_mouse, &p);
