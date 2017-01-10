@@ -233,10 +233,12 @@ int main(int argc, char* argv[])
 	Mat HSV;
 	//matrix storage for binary threshold image
 	Mat threshold;
-  //Mat threshold2;
+        Mat threshold2;
+	Mat threshold_ring;
 	//x and y values for the location of the object
 	int x_r = 0,  y_r = 0;
-        int x_b = 0, y_b = 0;
+        int x_b = 0,  y_b = 0;
+	int x_ring = 0,  y_ring = 0;
 	//create slider bars for HSV filtering
 	createTrackbars();
 	//video capture object to acquire webcam feed
@@ -292,10 +294,18 @@ int main(int argc, char* argv[])
        cvtColor(cameraFeed, HSV, COLOR_BGR2HSV);
 		    //filter HSV image between values and store filtered image to
 		    //threshold matrix
-		    inRange(HSV, Scalar(H_MIN_R, S_MIN_R, V_MIN_R), Scalar(H_MAX_R, S_MAX_R, V_MAX_R), threshold);
-                    inRange(HSV, Scalar(H_MIN_B, S_MIN_B, V_MIN_B), Scalar(H_MAX_B, S_MAX_B, V_MAX_B), threshold2);
+		    inRange(HSV, Scalar(H_MIN_R, S_MIN_R, V_MIN_R), Scalar(H_MAX_R, S_MAX_R, V_MAX_R), threshold);// eu
+                    inRange(HSV, Scalar(H_MIN_B, S_MIN_B, V_MIN_B), Scalar(H_MAX_B, S_MAX_B, V_MAX_B), threshold2);//adversarul
+	            inRange(HSV, Scalar(0, 0, 0), Scalar(0, 0, 0), threshold_ring);   //detectam ringul
+	    
 		    //perform morphological operations on thresholded image to eliminate noise
 		    //and emphasize the filtered object(s)
+	            if (useMorphOps)
+			    morphOps(threshold_ring);
+	            if (trackObjects)
+			      
+                               trackFilteredObject(x_ring, y_ring, threshold_ring, cameraFeed);
+			    
 		    if (useMorphOps)
 			    morphOps(threshold);
        
@@ -305,7 +315,18 @@ int main(int argc, char* argv[])
 		    if (trackObjects){
 			    
 			      trackFilteredObject(x_r, y_r, threshold, cameraFeed); 
+			      x_r = x_r + x_ring; // ca centru ringului sa fie in (0,0)
+			      y_r = y_r + y_ring;
 			      printf("me_x=%d, me_y=%d\n",x_r, y_r);
+			      if ( x_r * x_r + y_r * y_r >= 78400 ) //sa fie in ring 280*280
+			      { 
+				      
+				      Command(socketpd, 's');
+				      Command(socketpd, 'r');
+				      Command(socketpd, 'r');
+				      Command(socketpd, 'f');
+			      }
+			    
 			    
 		    }
           
